@@ -8,7 +8,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build"
   },
-  "homepage": "http://coolicky.com/",
+  "homepage": "https://coolicky.com/",
   "dependencies": {
     "@material-ui/core": "latest",
     "@material-ui/icons": "^4.9.1",
