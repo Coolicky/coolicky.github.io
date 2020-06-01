@@ -4,9 +4,14 @@ import Link from "@material-ui/core/Link";
 
 export default function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <Typography
+      variant="body2"
+      color="textSecondary"
+      align="center"
+      style={{ marginTop: 100 }}
+    >
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" href="https://github.com/Coolicky/">
         Piotr Kulicki
       </Link>{" "}
       {new Date().getFullYear()}

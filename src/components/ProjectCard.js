@@ -7,15 +7,14 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Collapse from "@material-ui/core/Collapse";
-// import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-// import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-// import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Grid } from "@material-ui/core";
+import CardApis from "../api/CardApi";
+import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,44 +41,48 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProjectCard(props) {
   const classes = useStyles();
+  const [data, setData] = React.useState(props.data);
   const [expanded, setExpanded] = React.useState(false);
+  const [liked, setLiked] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  // const [cardInfo, setCardInfo] = useState({
-  //   categoryTitle: "Category",
-  //   subCategoryTitle: "Subcategory",
-  //   pictureLocation: "https://picsum.photos/200",
-  //   pictureTittle: "Picture",
-  //   mainText:
-  //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Laoreet suspendisse interdum consectetur libero id. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus est.",
-  //   secondaryTitle: "Eu facilisis sed odio morbi.",
-  //   secondaryText:
-  //     "Facilisi nullam vehicula ipsum a arcu cursus vitae congue mauris. Nulla pellentesque dignissim enim sit. Sed sed risus pretium quam vulputate dignissim suspendisse in. Vestibulum morbi blandit cursus risus at ultrices mi. Erat imperdiet sed euismod nisi. In hac habitasse platea dictumst quisque sagittis purus sit amet. Fames ac turpis egestas sed tempus urna et pharetra pharetra.",
-  // });
+  async function handleLike() {
+    setLiked(!liked);
+    var newLikes = data.likes;
+    liked ? newLikes-- : newLikes++;
+    setData({ ...data, likes: newLikes });
+    CardApis.updateCardById(data._id, { likes: newLikes });
+  }
 
   return (
     <Grid item xs={12} sm={6} lg={4} md={4}>
       <Card className={classes.root}>
         <CardHeader
-          title={props.data.categoryTitle}
-          subheader={props.data.subCategoryTitle}
+          title={data.categoryTitle}
+          subheader={data.subCategoryTitle}
+          action={
+            <IconButton aria-label="more">
+              <OpenInNewIcon />
+            </IconButton>
+          }
         />
         <CardMedia
           className={classes.media}
-          image={props.data.pictureLocation}
-          title={props.data.pictureTittle}
+          image={data.pictureLocation}
+          title={data.pictureTittle}
         />
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
-            {props.data.mainText}
+            {data.mainText}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+          <IconButton aria-label="like me!" onClick={handleLike}>
+            <FavoriteIcon color={liked ? "secondary" : "default"} />
+            <Typography style={{ marginLeft: 10 }}>{data.likes}</Typography>
           </IconButton>
           <IconButton
             className={clsx(classes.expand, {
@@ -94,8 +97,8 @@ export default function ProjectCard(props) {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>{props.data.secondaryTitle}</Typography>
-            <Typography paragraph>{props.data.secondaryText}</Typography>
+            <Typography paragraph>{data.secondaryTitle}</Typography>
+            <Typography paragraph>{data.secondaryText}</Typography>
           </CardContent>
         </Collapse>
       </Card>
